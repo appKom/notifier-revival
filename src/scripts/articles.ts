@@ -14,8 +14,9 @@ const getJson = async ({ url }: AJAXArguments): Promise<ArticleResponse> => {
   return (await response.json()) as ArticleResponse;
 };
 
-const printArticles = async () => {
+export const getNewestArticles = async (): Promise<
+  ArticleResponseResultType[]
+> => {
   const json = await getJson({ url: ARTICLE_URL });
-  console.log(json.results[0].heading);
+  return json.results.slice(0, 5) as ArticleResponseResultType[];
 };
-printArticles();
