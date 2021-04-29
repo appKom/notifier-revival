@@ -17,8 +17,12 @@
     "url": "https://github.com/appKom/notifier-revival"
   },
   "dependencies": {
+    "@types/styled-components": "^5.1.9",
+    "node-fetch": "^2.6.1",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "styled-components": "^5.2.3",
+    "styled-components-ts": "0.0.15"
   },
   "devDependencies": {
     "@types/chrome": "0.0.100",
