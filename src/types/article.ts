@@ -7,6 +7,7 @@ export type ArticleResponseResultType = {
   heading: string;
   authors: string;
   image: ArticleResponseImageType;
+  absolute_url: string;
 };
 
 export type ArticleResponse = {

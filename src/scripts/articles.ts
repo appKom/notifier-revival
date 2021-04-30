@@ -18,5 +18,6 @@ export const getNewestArticles = async (): Promise<
   ArticleResponseResultType[]
 > => {
   const json = await getJson({ url: ARTICLE_URL });
+
   return json.results.slice(0, 5) as ArticleResponseResultType[];
 };
