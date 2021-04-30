@@ -26,5 +26,5 @@
     "scripts": ["js/vendor.js", "js/background.js"]
   },
 
-  "permissions": ["storage", "<all_urls>"]
+  "permissions": ["storage", "tabs", "<all_urls>"]
 }

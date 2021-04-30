@@ -2,14 +2,18 @@ import React, { FC, useState } from "react";
 import ReactDOM from "react-dom";
 import Header from "./components/Header";
 import styled from "styled-components";
-import Counter from "./components/Counter";
 import Article from "./components/Article";
-import { getNewestArticles } from "./scripts/articles";
+import { getNewestArticle } from "./scripts/articles";
+
+const Container = styled.div`
+  width: 400px;
+`;
+
 
 const Popup = () => {
   const [articleElement, setArticleElements] = useState<JSX.Element[]>([]);
 
-  getNewestArticles().then((articles) => {
+  getNewestArticle().then((articles) => {
     const articleElements = Object.keys(articles).map((key: string) => (
       <Article
         url={articles[Number(key)].absolute_url}
@@ -22,11 +26,11 @@ const Popup = () => {
   });
 
   return (
-    <div>
+    <Container>
       <Header />
-      <Counter />
+      <h4>Siste artikkel fra OW4</h4>
       {articleElement}
-    </div>
+    </Container>
   );
 };
 
@@ -37,4 +41,3 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-const Container = styled.div``;

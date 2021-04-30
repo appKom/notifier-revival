@@ -14,10 +14,10 @@ const getJson = async ({ url }: AJAXArguments): Promise<ArticleResponse> => {
   return (await response.json()) as ArticleResponse;
 };
 
-export const getNewestArticles = async (): Promise<
+export const getNewestArticle = async (): Promise<
   ArticleResponseResultType[]
 > => {
   const json = await getJson({ url: ARTICLE_URL });
 
-  return json.results.slice(0, 5) as ArticleResponseResultType[];
+  return json.results.slice(0, 1) as ArticleResponseResultType[];
 };
