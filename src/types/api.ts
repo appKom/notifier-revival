@@ -3,3 +3,7 @@ export type AJAXArguments = {
   body?: Record<string, unknown> | string;
   headers?: HeadersInit;
 };
+
+export type spotifyTokenResponseType = {
+  access_token: string;
+};

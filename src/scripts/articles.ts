@@ -1,11 +1,6 @@
-import {
-  get,
-  ARTICLE_URL,
-  SPOTIFY_AUTH_URL,
-  authorizeToSpotify,
-} from "../utility/api";
+import { get, ARTICLE_URL, SPOTIFY_AUTH_URL } from "../utility/api";
+import { getLatestEpisodes } from "../utility/spotify";
 import { AJAXArguments } from "../types/api";
-const config = require("../../config.json");
 
 import {
   ArticleResponse,
@@ -13,15 +8,7 @@ import {
   ArticleResponseResultType,
 } from "../types/article";
 
-authorizeToSpotify({ url: SPOTIFY_AUTH_URL })
-  .then((resp) => {
-    resp
-      .json()
-      .then((json) => console.log(json))
-      .catch((err) => console.log(err));
-  })
-  .catch((err) => console.log(err));
-
+getLatestEpisodes().then((resp) => console.log(resp));
 const getJson = async ({ url }: AJAXArguments): Promise<ArticleResponse> => {
   const response = await get({ url: ARTICLE_URL });
   return (await response.json()) as ArticleResponse;
