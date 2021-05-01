@@ -9,7 +9,6 @@ const Container = styled.div`
   width: 400px;
 `;
 
-
 const Popup = () => {
   const [articleElement, setArticleElements] = useState<JSX.Element[]>([]);
 
@@ -40,4 +39,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
-
