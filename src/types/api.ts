@@ -7,3 +7,7 @@ export type AJAXArguments = {
 export type spotifyTokenResponseType = {
   access_token: string;
 };
+
+export type spotifyResponseType = {
+  items: { id: string }[];
+};

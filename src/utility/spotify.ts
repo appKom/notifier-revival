@@ -1,8 +1,8 @@
 const config = require("../../config.json");
 const base64 = require("base-64");
 import { SPOTIFY_AUTH_URL, get, SPOTIFY_SHOW_URL } from "./api";
-import { spotifyTokenResponseType } from "../types/api";
-
+import { spotifyTokenResponseType, spotifyResponseType } from "../types/api";
+import { saveToStorage, loadFromStorage } from "./storage";
 const fetchSpotifyToken = (): Promise<Response> => {
   const params = new URLSearchParams();
   params.append("grant_type", "client_credentials");
@@ -25,30 +25,17 @@ const loadSpotifyToken = () => {
   return encoded;
 };
 
-type localStorageType = {
-  token: string;
-};
-
 export const saveToken = async (): Promise<void> => {
   const response = await fetchSpotifyToken();
   const { access_token } = (await response.json()) as spotifyTokenResponseType;
   const key = "token";
 
-  return new Promise((resolve) => {
-    chrome.storage.sync.set({ token: access_token }, () => resolve());
-  });
+  await saveToStorage(key, access_token);
 };
 
-export const loadToken = (): Promise<Response> => {
-  return new Promise((resolve, reject) => {
-    return chrome.storage.sync.get(["token"], (result) => {
-      if (result.token != undefined) {
-        resolve(result.token);
-      } else {
-        reject();
-      }
-    });
-  });
+export const loadToken = async () => {
+  const response = await loadFromStorage("token");
+  return response.token;
 };
 
 export const fetchEpisodes = async (): Promise<Response> => {
@@ -63,8 +50,9 @@ export const fetchEpisodes = async (): Promise<Response> => {
   });
 };
 
-export const getLatestEpisodes = async (): Promise<any> => {
+export const getLatestEpisodeID = async (): Promise<string> => {
   await saveToken();
   const response = await fetchEpisodes();
-  return await response.json();
+  const json = (await response.json()) as spotifyResponseType;
+  return json.items[0].id;
 };
