@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Article from "./components/Article";
 import SpotifyEmbed from "./components/SpotifyEmbed";
 import { loadFromStorage } from "./utility/storage";
-
+import Bike from "./components/Bike";
 const Container = styled.div`
   width: 400px;
 `;
@@ -34,7 +34,7 @@ const Popup: FC = () => {
     const stations = JSON.parse(resp.stations);
 
     const elements = Object.keys(stations).map((key: string) => (
-      <div>{stations[Number(key)].name}</div>
+      <Bike obj={stations[Number(key)]} />
     ));
 
     setBikeElements(() => elements);
@@ -45,8 +45,9 @@ const Popup: FC = () => {
   return (
     <Container>
       <Header />
-      <h4>Siste artikkel fra OW4</h4>
+      <h2>Siste artikkel fra OW4</h2>
       {articleElement}
+      <h2>Bysykkel:</h2>
       {bikeElements}
     </Container>
   );

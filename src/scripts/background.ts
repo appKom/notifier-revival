@@ -6,10 +6,13 @@ async function polling() {
   const newestArticle = await getNewestArticle();
   const ID = await getLatestEpisodeID();
   const stations = await getFavoriteStations();
-  await saveToStorage("article", JSON.stringify(newestArticle));
-  await saveToStorage("id", ID);
-  await saveToStorage("stations", JSON.stringify(stations));
+
+  chrome.storage.sync.clear(async () => {
+    await saveToStorage("article", JSON.stringify(newestArticle));
+    await saveToStorage("id", ID);
+    await saveToStorage("stations", JSON.stringify(stations));
+  });
 }
 
 polling();
-setInterval(() => polling, 1000 * 60);
+setInterval(polling, 1000 * 60);
