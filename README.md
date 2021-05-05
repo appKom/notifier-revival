@@ -1,4 +1,6 @@
 # Notifier
+The widget-based notifier as an chrome exstension! 
+
 
 ### Current Widgets
 - Spotify
