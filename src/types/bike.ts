@@ -21,6 +21,5 @@ export type constructedStationType = {
   name: string;
   capacity: number;
   station_id: string;
-
   num_bikes_available: number;
 };

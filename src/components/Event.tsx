@@ -1,11 +1,10 @@
 import React, { FC } from "react";
 import styled from "styled-components";
 import { ONLINE_BASE } from "../utility/api";
+import { eventResultType } from "../types/event";
 
-type ArticleProps = {
-  url: string;
-  header: string;
-  imageURL: string;
+type EventProps = {
+  obj: eventResultType;
 };
 
 const Container = styled.div`
@@ -22,21 +21,21 @@ const ImageText = styled.div`
   left: 16px;
 `;
 
-const Article: FC<ArticleProps> = ({ url, header, imageURL }: ArticleProps) => {
+const Event: FC<EventProps> = ({ obj }: EventProps) => {
   return (
     <Container>
-      <a target="_blank" href={ONLINE_BASE + url}>
+      <a target="_blank" href={ONLINE_BASE + obj.absolute_url}>
         <img
-          src={ONLINE_BASE + imageURL}
+          src={ONLINE_BASE + obj.image.thumb}
           alt="Article Image"
           width="100%"
           height="100%"
         />
       </a>
 
-      <ImageText>{header}</ImageText>
+      <ImageText>{obj.title}</ImageText>
     </Container>
   );
 };
 
-export default Article;
+export default Event;

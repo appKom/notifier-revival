@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import { constructedStationType } from "../types/bikes";
+import { constructedStationType } from "../types/bike";
 
 type BikeProps = {
   obj: constructedStationType;
@@ -8,6 +8,7 @@ type BikeProps = {
 
 const Container = styled.div`
   width: 75%;
+  border: 1px solid black;
 `;
 
 const Bike: FC<BikeProps> = ({ obj }: BikeProps) => {

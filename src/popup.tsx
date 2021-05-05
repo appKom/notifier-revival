@@ -6,39 +6,46 @@ import Article from "./components/Article";
 import SpotifyEmbed from "./components/SpotifyEmbed";
 import { loadFromStorage } from "./utility/storage";
 import Bike from "./components/Bike";
+import Event from "./components/Event";
 const Container = styled.div`
   width: 400px;
 `;
 
 const Popup: FC = () => {
-  const [articleElement, setArticleElement] = useState<JSX.Element[]>([]);
-  const [bikeElements, setBikeElements] = useState<JSX.Element[]>([]);
-
+  const [articleElement, setArticleElement] = useState<JSX.Element>();
+  const [bikeElement, setBikeElement] = useState<JSX.Element>();
+  const [eventElement, setEventElement] = useState<JSX.Element>();
   const [spoitfyID, setSpotifyID] = useState("");
 
   loadFromStorage("id").then((resp) => setSpotifyID(() => resp.id));
 
-  loadFromStorage("article").then((resp) => {
-    const articles = JSON.parse(resp.article);
-    const elements = Object.keys(articles).map((key: string) => (
-      <Article
-        url={articles[Number(key)].absolute_url}
-        header={articles[Number(key)].heading}
-        imageURL={articles[Number(key)].image.thumb}
-      />
-    ));
-    setArticleElement(() => elements);
-  });
+  if (articleElement == undefined) {
+    loadFromStorage("article").then((resp) => {
+      const article = JSON.parse(resp.article);
 
-  loadFromStorage("stations").then((resp) => {
-    const stations = JSON.parse(resp.stations);
+      setArticleElement(() => (
+        <Article
+          url={article.absolute_url}
+          header={article.heading}
+          imageURL={article.image.thumb}
+        />
+      ));
+    });
+  }
 
-    const elements = Object.keys(stations).map((key: string) => (
-      <Bike obj={stations[Number(key)]} />
-    ));
+  if (bikeElement == undefined) {
+    loadFromStorage("station").then((resp) => {
+      const station = JSON.parse(resp.station);
+      setBikeElement(() => <Bike obj={station} />);
+    });
+  }
 
-    setBikeElements(() => elements);
-  });
+  if (eventElement == undefined) {
+    loadFromStorage("event").then((resp) => {
+      const event = JSON.parse(resp.event);
+      setEventElement(() => <Event obj={event} />);
+    });
+  }
 
   //<SpotifyEmbed id={spoitfyID} />
 
@@ -48,7 +55,9 @@ const Popup: FC = () => {
       <h2>Siste artikkel fra OW4</h2>
       {articleElement}
       <h2>Bysykkel:</h2>
-      {bikeElements}
+      {bikeElement}
+      <h2>Event:</h2>
+      {eventElement}
     </Container>
   );
 };
