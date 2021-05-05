@@ -1,15 +1,15 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, Suspense, lazy } from "react";
 import ReactDOM from "react-dom";
 import Header from "./components/Header";
 import styled from "styled-components";
 import Article from "./components/Article";
-import SpotifyEmbed from "./components/SpotifyEmbed";
 import { loadFromStorage } from "./utility/storage";
 import Bike from "./components/Bike";
 import Event from "./components/Event";
 const Container = styled.div`
   width: 400px;
 `;
+const SpotifyEmbed = lazy(() => import("./components/SpotifyEmbed"));
 
 const Popup: FC = () => {
   const [articleElement, setArticleElement] = useState<JSX.Element>();
@@ -17,12 +17,13 @@ const Popup: FC = () => {
   const [eventElement, setEventElement] = useState<JSX.Element>();
   const [spoitfyID, setSpotifyID] = useState("");
 
-  loadFromStorage("id").then((resp) => setSpotifyID(() => resp.id));
+  if (spoitfyID == "") {
+    loadFromStorage("id").then((resp) => setSpotifyID(() => resp.id));
+  }
 
   if (articleElement == undefined) {
     loadFromStorage("article").then((resp) => {
       const article = JSON.parse(resp.article);
-
       setArticleElement(() => (
         <Article
           url={article.absolute_url}
@@ -47,8 +48,6 @@ const Popup: FC = () => {
     });
   }
 
-  //<SpotifyEmbed id={spoitfyID} />
-
   return (
     <Container>
       <Header />
@@ -58,6 +57,10 @@ const Popup: FC = () => {
       {bikeElement}
       <h2>Event:</h2>
       {eventElement}
+      <h2>Spotify:</h2>
+      <Suspense fallback={<div>Loading...</div>}>
+        <SpotifyEmbed id={spoitfyID} />
+      </Suspense>
     </Container>
   );
 };
