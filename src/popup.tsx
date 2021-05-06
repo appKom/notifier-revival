@@ -6,10 +6,18 @@ import Article from "./components/Article";
 import { loadFromStorage } from "./utility/storage";
 import Bike from "./components/Bike";
 import Event from "./components/Event";
+import WidgetContainer from "./components/WidgetContainer";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+
 const Container = styled.div`
   width: 400px;
 `;
 const SpotifyEmbed = lazy(() => import("./components/SpotifyEmbed"));
+
+export const ItemTypes = {
+  ARTICLE: "article",
+};
 
 const Popup: FC = () => {
   const [articleElement, setArticleElement] = useState<JSX.Element>();
@@ -49,19 +57,23 @@ const Popup: FC = () => {
   }
 
   return (
-    <Container>
-      <Header />
-      <h2>Siste artikkel fra OW4</h2>
-      {articleElement}
-      <h2>Bysykkel:</h2>
-      {bikeElement}
-      <h2>Event:</h2>
-      {eventElement}
-      <h2>Spotify:</h2>
-      <Suspense fallback={<div>Loading...</div>}>
-        <SpotifyEmbed id={spoitfyID} />
-      </Suspense>
-    </Container>
+    <DndProvider backend={HTML5Backend}>
+      <Container>
+        <Header />
+
+        <WidgetContainer child={articleElement} />
+        <WidgetContainer child={bikeElement} />
+
+        <WidgetContainer child={eventElement} />
+        <WidgetContainer
+          child={
+            <Suspense fallback={<div>Loading...</div>}>
+              <SpotifyEmbed id={spoitfyID} />
+            </Suspense>
+          }
+        />
+      </Container>
+    </DndProvider>
   );
 };
 
