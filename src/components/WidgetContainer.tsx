@@ -5,10 +5,12 @@ import { useDrop } from "react-dnd";
 
 type WidgetContainerProps = {
   child: JSX.Element | undefined;
+  editState: boolean;
 };
 
 const WidgetContainer: FC<WidgetContainerProps> = ({
   child,
+  editState,
 }: WidgetContainerProps) => {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: ItemTypes.NORMAL,
@@ -19,11 +21,11 @@ const WidgetContainer: FC<WidgetContainerProps> = ({
     }),
   }));
 
-  const isActive = canDrop && isOver;
+  const isActive = canDrop && isOver && editState;
   let backgroundColor = "#222";
   if (isActive) {
     backgroundColor = "darkgreen";
-  } else if (canDrop) {
+  } else if (canDrop && editState) {
     backgroundColor = "darkkhaki";
   }
 

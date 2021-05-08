@@ -27,7 +27,20 @@ type eventInfoType = {
   title: string;
 };
 
-const Event: FC = () => {
+type imageProps = {
+  visible: boolean;
+};
+
+const Image = styled.img<imageProps>`
+  width: 100%;
+  height: 100%;
+  opacity: ${(imageProps) => (imageProps.visible ? 0.1 : 1)};
+`;
+
+type eventProps = {
+  editState: boolean;
+};
+const Event: FC<eventProps> = ({ editState }: eventProps) => {
   const [eventInfo, setEventInfo] = useState<eventInfoType>();
 
   const [{ isDragging }, drag] = useDrag(() => ({
@@ -56,11 +69,10 @@ const Event: FC = () => {
   return (
     <Container ref={drag}>
       <a target="_blank" href={ONLINE_BASE + eventInfo.absolute_url}>
-        <img
+        <Image
           src={ONLINE_BASE + eventInfo.thumb}
           alt="Article Image"
-          width="100%"
-          height="100%"
+          visible={editState}
         />
       </a>
 

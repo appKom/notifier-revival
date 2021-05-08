@@ -14,18 +14,34 @@ const SpotifyEmbed = lazy(() => import("./components/SpotifyEmbed"));
 const Container = styled.div`
   width: 400px;
 `;
+
 const Popup: FC = () => {
   const [editState, setEditState] = useState(false);
+
+  const changeEditState = () =>
+    setEditState((current) => (current ? false : true));
 
   return (
     <DndProvider backend={HTML5Backend}>
       <Container>
         <Header />
-        <button onClick={() => setEditState(true)}>Edit!</button>
-        <WidgetContainer child={<Article editState={editState} />} />
-        <WidgetContainer child={<Bike />} />
-        <WidgetContainer child={<Event />} />
+        <button onClick={changeEditState}>
+          {editState ? "Finished editing" : "Edit layout"}
+        </button>
+
         <WidgetContainer
+          editState={editState}
+          child={<Article editState={editState} />}
+        />
+        <WidgetContainer editState={editState} child={<Bike />} />
+
+        <WidgetContainer
+          editState={editState}
+          child={<Event editState={editState} />}
+        />
+
+        <WidgetContainer
+          editState={editState}
           child={
             <Suspense fallback={<div>Loading...</div>}>
               <SpotifyEmbed />
