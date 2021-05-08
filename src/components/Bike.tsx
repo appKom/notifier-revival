@@ -1,12 +1,9 @@
-import React, { FC } from "react";
+import React, { FC, memo, useState } from "react";
 import styled from "styled-components";
 import { constructedStationType } from "../types/bike";
 import { ItemTypes } from "../popup";
 import { useDrag } from "react-dnd";
-
-type BikeProps = {
-  obj: constructedStationType;
-};
+import { loadFromStorage } from "../utility/storage";
 
 const Container = styled.div`
   width: 100%;
@@ -18,7 +15,15 @@ interface DropResult {
   name: string;
 }
 
-const Bike: FC<BikeProps> = ({ obj }: BikeProps) => {
+type bikeInfoType = {
+  num_bikes_available: number;
+  capacity: number;
+  name: string;
+};
+
+const Bike: FC = () => {
+  const [bikeInfo, setBikeInfo] = useState<bikeInfoType>();
+
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.ARTICLE,
     end: (item, monitor) => {
@@ -32,14 +37,24 @@ const Bike: FC<BikeProps> = ({ obj }: BikeProps) => {
     }),
   }));
 
+  loadFromStorage("station").then((resp) => {
+    const station = JSON.parse(resp.station) as constructedStationType;
+    setBikeInfo({
+      name: station.name,
+      capacity: station.capacity,
+      num_bikes_available: station.num_bikes_available,
+    });
+  });
+
+  if (bikeInfo == undefined) return <div>Loading...</div>;
   return (
     <Container ref={drag}>
-      <h4>{obj.name}</h4>
+      <h4>{bikeInfo.name}</h4>
       <div>
-        {obj.num_bikes_available} / {obj.capacity}
+        {bikeInfo.num_bikes_available} / {bikeInfo.capacity}
       </div>
     </Container>
   );
 };
 
-export default Bike;
+export default memo(Bike);

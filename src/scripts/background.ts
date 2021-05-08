@@ -17,6 +17,8 @@ async function polling() {
     await saveToStorage("event", JSON.stringify(newestEvent));
   });
 }
+console.log("Started running background script ...");
 
 polling();
+
 setInterval(polling, 1000 * 60);

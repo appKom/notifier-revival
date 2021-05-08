@@ -1,12 +1,10 @@
-import React, { FC } from "react";
+import React, { FC, memo, useState } from "react";
 import styled from "styled-components";
 import { ONLINE_BASE } from "../utility/api";
 import { eventResultType } from "../types/event";
 import { ItemTypes } from "../popup";
 import { useDrag } from "react-dnd";
-type EventProps = {
-  obj: eventResultType;
-};
+import { loadFromStorage } from "../utility/storage";
 
 const Container = styled.div`
   position: relative;
@@ -26,7 +24,15 @@ interface DropResult {
   name: string;
 }
 
-const Event: FC<EventProps> = ({ obj }: EventProps) => {
+type eventInfoType = {
+  absolute_url: string;
+  thumb: string;
+  title: string;
+};
+
+const Event: FC = () => {
+  const [eventInfo, setEventInfo] = useState<eventInfoType>();
+
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.ARTICLE,
     end: (item, monitor) => {
@@ -40,20 +46,31 @@ const Event: FC<EventProps> = ({ obj }: EventProps) => {
     }),
   }));
 
+  loadFromStorage("event").then((resp) => {
+    const event = JSON.parse(resp.event) as eventResultType;
+    setEventInfo({
+      absolute_url: event.absolute_url,
+      thumb: event.image.thumb,
+      title: event.title,
+    });
+  });
+
+  if (eventInfo == undefined) return <div>Loading...</div>;
   return (
     <Container ref={drag}>
-      <a target="_blank" href={ONLINE_BASE + obj.absolute_url}>
+      <a target="_blank" href={ONLINE_BASE + eventInfo.absolute_url}>
         <img
-          src={ONLINE_BASE + obj.image.thumb}
+          src={ONLINE_BASE + eventInfo.thumb}
           alt="Article Image"
           width="100%"
           height="100%"
         />
       </a>
 
-      <ImageText>{obj.title}</ImageText>
+      <ImageText>{eventInfo.title}</ImageText>
     </Container>
   );
+  eventInfo;
 };
 
-export default Event;
+export default memo(Event);

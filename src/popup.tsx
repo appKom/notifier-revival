@@ -1,74 +1,40 @@
 import React, { FC, useState, Suspense, lazy } from "react";
 import ReactDOM from "react-dom";
-import Header from "./components/Header";
 import styled from "styled-components";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+
+import Header from "./components/Header";
 import Article from "./components/Article";
-import { loadFromStorage } from "./utility/storage";
 import Bike from "./components/Bike";
 import Event from "./components/Event";
 import WidgetContainer from "./components/WidgetContainer";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+
+const SpotifyEmbed = lazy(() => import("./components/SpotifyEmbed"));
 
 const Container = styled.div`
   width: 400px;
 `;
-const SpotifyEmbed = lazy(() => import("./components/SpotifyEmbed"));
 
 export const ItemTypes = {
   ARTICLE: "article",
 };
 
 const Popup: FC = () => {
-  const [articleElement, setArticleElement] = useState<JSX.Element>();
-  const [bikeElement, setBikeElement] = useState<JSX.Element>();
-  const [eventElement, setEventElement] = useState<JSX.Element>();
-  const [spoitfyID, setSpotifyID] = useState("");
-
-  if (spoitfyID == "") {
-    loadFromStorage("id").then((resp) => setSpotifyID(() => resp.id));
-  }
-
-  if (articleElement == undefined) {
-    loadFromStorage("article").then((resp) => {
-      const article = JSON.parse(resp.article);
-      setArticleElement(() => (
-        <Article
-          url={article.absolute_url}
-          header={article.heading}
-          imageURL={article.image.thumb}
-        />
-      ));
-    });
-  }
-
-  if (bikeElement == undefined) {
-    loadFromStorage("station").then((resp) => {
-      const station = JSON.parse(resp.station);
-      setBikeElement(() => <Bike obj={station} />);
-    });
-  }
-
-  if (eventElement == undefined) {
-    loadFromStorage("event").then((resp) => {
-      const event = JSON.parse(resp.event);
-      setEventElement(() => <Event obj={event} />);
-    });
-  }
+  const [editState, setEditState] = useState(false);
 
   return (
     <DndProvider backend={HTML5Backend}>
       <Container>
         <Header />
-
-        <WidgetContainer child={articleElement} />
-        <WidgetContainer child={bikeElement} />
-
-        <WidgetContainer child={eventElement} />
+        <button onClick={() => setEditState(true)}>Edit!</button>
+        <WidgetContainer child={<Article editState={editState} />} />
+        <WidgetContainer child={<Bike />} />
+        <WidgetContainer child={<Event />} />
         <WidgetContainer
           child={
             <Suspense fallback={<div>Loading...</div>}>
-              <SpotifyEmbed id={spoitfyID} />
+              <SpotifyEmbed />
             </Suspense>
           }
         />
