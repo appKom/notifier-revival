@@ -1,17 +1,13 @@
 import React, { FC, memo, useState } from "react";
-import { ItemTypes } from "../popup";
+import { ItemTypes, DropResult } from "../types/drag";
 import { useDrag } from "react-dnd";
 import { loadFromStorage } from "../utility/storage";
-
-interface DropResult {
-  name: string;
-}
 
 const SpotifyEmbed: FC = () => {
   const [spoitfyID, setSpotifyID] = useState("");
 
   const [{ isDragging }, drag] = useDrag(() => ({
-    type: ItemTypes.ARTICLE,
+    type: ItemTypes.NORMAL,
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {

@@ -2,7 +2,7 @@ import React, { FC, memo, useState } from "react";
 import styled from "styled-components";
 import { ONLINE_BASE } from "../utility/api";
 import { eventResultType } from "../types/event";
-import { ItemTypes } from "../popup";
+import { ItemTypes, DropResult } from "../types/drag";
 import { useDrag } from "react-dnd";
 import { loadFromStorage } from "../utility/storage";
 
@@ -20,9 +20,6 @@ const ImageText = styled.div`
   top: 8px;
   left: 16px;
 `;
-interface DropResult {
-  name: string;
-}
 
 type eventInfoType = {
   absolute_url: string;
@@ -34,7 +31,7 @@ const Event: FC = () => {
   const [eventInfo, setEventInfo] = useState<eventInfoType>();
 
   const [{ isDragging }, drag] = useDrag(() => ({
-    type: ItemTypes.ARTICLE,
+    type: ItemTypes.NORMAL,
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {

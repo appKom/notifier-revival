@@ -1,7 +1,7 @@
 import React, { FC, memo, useState } from "react";
 import styled from "styled-components";
 import { ONLINE_BASE } from "../utility/api";
-import { ItemTypes } from "../popup";
+import { ItemTypes, DropResult } from "../types/drag";
 import { useDrag } from "react-dnd";
 import { loadFromStorage } from "../utility/storage";
 import { ArticleResponseResultType } from "../types/article";
@@ -35,10 +35,6 @@ const Image = styled.img<imageProps>`
   opacity: ${(imageProps) => (imageProps.visible ? 0.1 : 1)};
 `;
 
-interface DropResult {
-  name: string;
-}
-
 type articleInfoType = {
   url: string;
   imageURL: string;
@@ -49,7 +45,7 @@ const Article: FC<ArticleProps> = ({ editState }: ArticleProps) => {
   const [articleInfo, setArticleInfo] = useState<articleInfoType>();
 
   const [{ isDragging }, drag] = useDrag(() => ({
-    type: ItemTypes.ARTICLE,
+    type: ItemTypes.NORMAL,
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {

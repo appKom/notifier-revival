@@ -1,7 +1,7 @@
 import React, { FC, memo, useState } from "react";
 import styled from "styled-components";
 import { constructedStationType } from "../types/bike";
-import { ItemTypes } from "../popup";
+import { ItemTypes, DropResult } from "../types/drag";
 import { useDrag } from "react-dnd";
 import { loadFromStorage } from "../utility/storage";
 
@@ -10,10 +10,6 @@ const Container = styled.div`
   height: 100%;
   color: white;
 `;
-
-interface DropResult {
-  name: string;
-}
 
 type bikeInfoType = {
   num_bikes_available: number;
@@ -25,7 +21,7 @@ const Bike: FC = () => {
   const [bikeInfo, setBikeInfo] = useState<bikeInfoType>();
 
   const [{ isDragging }, drag] = useDrag(() => ({
-    type: ItemTypes.ARTICLE,
+    type: ItemTypes.NORMAL,
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {

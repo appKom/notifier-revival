@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import { ItemTypes } from "../popup";
+import { ItemTypes } from "../types/drag";
 import { useDrop } from "react-dnd";
 
 type WidgetContainerProps = {
@@ -11,7 +11,7 @@ const WidgetContainer: FC<WidgetContainerProps> = ({
   child,
 }: WidgetContainerProps) => {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
-    accept: ItemTypes.ARTICLE,
+    accept: ItemTypes.NORMAL,
     drop: () => ({ name: "WidgetContainer" }),
     collect: (monitor) => ({
       isOver: monitor.isOver(),

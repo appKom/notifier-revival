@@ -9,17 +9,11 @@ import Article from "./components/Article";
 import Bike from "./components/Bike";
 import Event from "./components/Event";
 import WidgetContainer from "./components/WidgetContainer";
-
 const SpotifyEmbed = lazy(() => import("./components/SpotifyEmbed"));
 
 const Container = styled.div`
   width: 400px;
 `;
-
-export const ItemTypes = {
-  ARTICLE: "article",
-};
-
 const Popup: FC = () => {
   const [editState, setEditState] = useState(false);
 
